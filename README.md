@@ -34,7 +34,12 @@ npm run build
 npm run lint
 ```
 
-## 功能特点
+## 功能
+### UI框架
+1. element-plus
+2. unocss
+
+### svg
 ### 代码规范
 1. `EsLint` + `Pretter` + `EditorConfig` 代码规范
 2. `husky` + `int-staged` 提交代码时进行强约束来保证仓库代码质量

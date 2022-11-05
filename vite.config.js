@@ -9,6 +9,9 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
+// https://github.com/unocss/unocss/tree/main/packages/vite
+import Unocss from 'unocss/vite'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -19,6 +22,9 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver()],
+    }),
+    Unocss({
+      /* options */
     }),
   ],
   resolve: {

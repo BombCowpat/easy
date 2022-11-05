@@ -10,6 +10,7 @@ import HelloWorld from './components/HelloWorld.vue'
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
 
+      <div btn>unocss</div>
       <el-row>
         <el-button>Default</el-button>
         <el-button type="primary">Primary</el-button>
