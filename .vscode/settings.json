@@ -1,4 +1,6 @@
 {
   "vue3snippets.singleQuote": true, // 'Vue 3 Support - All In One' 插件 vue 组件格式化时的配置，如果和 eslint 配置冲突则 'vscode eslint' 插件会给出警告，出现黄色波浪线
-  "vue3snippets.semi": false
+  "vue3snippets.semi": false,
+  "vue3snippets.arrowParens": "avoid",
+  "vue3snippets.printWidth": 120
 }

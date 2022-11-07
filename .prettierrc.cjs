@@ -12,6 +12,7 @@ const prettierConfig = {
   trailingComma: 'all',
   tabWidth: 2,
   printWidth: 100,
+  arrowParens: 'avoid',
 }
 
 module.exports = prettierConfig

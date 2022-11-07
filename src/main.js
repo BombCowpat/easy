@@ -4,7 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-import './assets/main.css'
+import '@unocss/reset/tailwind.css' // 重置浏览器默认样式
 import 'uno.css'
 
 const app = createApp(App)
