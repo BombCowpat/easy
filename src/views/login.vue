@@ -2,15 +2,15 @@
   <div>
     <el-card class="mt40 mxauto w-1/4">
       <h3 class="text-center text-xl mb2">后台管理系统</h3>
-      <el-form ref="form" :model="loginForm">
-        <el-form-item>
+      <el-form ref="form" :model="loginForm" :rules="rules" status-icon>
+        <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="admin">
             <template #prefix>
               <IEpUser />
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input v-model="loginForm.password" placeholder="admin123" type="password">
             <template #prefix>
               <IEpLock />
@@ -41,15 +41,20 @@
 
 <script>
 import Cookies from 'js-cookie'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { getCodeImg } from '@/api/login'
 import { encrypt, decrypt } from '@/utils/jsencrypt.js'
+import { useUserStore } from '@/stores/user'
+import { useRouter, useRoute } from 'vue-router'
 export default {
   setup() {
     const form = ref(null)
     const captchaEnabled = ref(false)
     const codeUrl = ref('')
     const loading = ref(false)
+    const redirect = ref(undefined)
+    const router = useRouter()
+    const route = useRoute()
     const loginForm = reactive({
       username: '',
       password: '',
@@ -57,10 +62,17 @@ export default {
       code: '',
       uuid: '',
     })
+    const rules = reactive({
+      username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
+      password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
+      code: [{ required: true, trigger: 'change', message: '请输入验证码' }],
+    })
+    const user = useUserStore()
     function getCode() {
       getCodeImg().then(res => {
         captchaEnabled.value = res.captchaEnabled
         codeUrl.value = 'data:image/gif;base64,' + res.img
+        loginForm.uuid = res.uuid
       })
     }
     function getCookie() {
@@ -71,7 +83,6 @@ export default {
       }
       loginForm.rememberMe = Cookies.get('rememberMe') === 'true' ? true : false
     }
-
     function handleLogin() {
       form.value.validate(valid => {
         if (valid) {
@@ -85,20 +96,30 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
-          setTimeout(() => {
-            loading.value = false
-          }, 1000)
+          user
+            .login(loginForm)
+            .then(() => {
+              loading.value = false
+              return router.push(redirect.value || '/')
+            })
+            .catch(() => {
+              loading.value = false
+            })
         }
       })
     }
     getCode()
     getCookie()
+    onMounted(() => {
+      redirect.value = route.query.redirect
+    })
     return {
       form,
       captchaEnabled,
       codeUrl,
       loginForm,
       loading,
+      rules,
       getCode,
       handleLogin,
     }

@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 
 import '@unocss/reset/tailwind.css' // 重置浏览器默认样式
+import 'element-plus/es/components/message/style/css'
 import 'uno.css'
 
 const app = createApp(App)
