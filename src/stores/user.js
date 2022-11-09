@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import defaultAvatarUrl from '@/assets/images/profile.jpg'
 
 export const useUserStore = defineStore('user', {
   // 推荐使用 完整类型推断的箭头函数
@@ -36,7 +37,19 @@ export const useUserStore = defineStore('user', {
 
     // 获取用户信息
     getInfo() {
-      return getInfo()
+      return getInfo(res => {
+        const user = res.user
+        this.avatar = user.avatar ? defaultAvatarUrl : import.meta.env.VITE_BASE_API + user.avatar
+        if (res.roles && res.roles.length > 0) {
+          // 验证返回的roles是否是一个非空数组
+          this.roles = res.roles
+          this.permissions = res.permissions
+        } else {
+          this.roles = ['ROLE_DEFAULT']
+        }
+        this.name = user.userName
+        return res
+      })
     },
   },
 })

@@ -1,11 +1,13 @@
 import axios from 'axios'
 import errorCode from '@/utils/errorCode'
+import { getToken } from '@/utils/auth'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
-import { useUserStore } from '../stores/user.js'
+import { useUserStore } from '@/stores/user.js'
+
+// const user = useUserStore() // 注意：不能在一开始就调用useUserStore()，因为导入此模块时，main.js 中的pinia可能还没完成初始化和安装，在实际需要时调用即可
 
 // 是否显示重新登录
 export let isRelogin = { show: false }
-const user = useUserStore()
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 // 创建axios实例
@@ -19,6 +21,13 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
+    // 是否需要设置 token
+    const isToken = (config.headers || {}).isToken === false
+    // 是否需要防止数据重复提交
+    // const isRepeatSubmit = (config.headers || {}).repeatSubmit === false
+    if (getToken() && !isToken) {
+      config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    }
     return config
   },
   error => {
@@ -50,7 +59,7 @@ service.interceptors.response.use(
         })
           .then(() => {
             isRelogin.show = false
-            return user.logout()
+            return useUserStore().logout()
           })
           .then(() => {
             location.href = '/index'

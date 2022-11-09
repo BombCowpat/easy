@@ -11,7 +11,7 @@ const prettierConfig = {
   jsxSingleQuote: true,
   trailingComma: 'all',
   tabWidth: 2,
-  printWidth: 100,
+  printWidth: 180,
   arrowParens: 'avoid',
 }
 
