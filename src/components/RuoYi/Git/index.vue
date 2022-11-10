@@ -1,14 +1,14 @@
 <template>
   <div>
-    <!-- <svg-icon icon-class="github" @click="goto" /> -->
+    <svg-icon icon-class="github" @click="goto" />
   </div>
 </template>
 
 <script setup>
-// import { ref } from 'vue'
-// const url = ref('https://gitee.com/y_project/RuoYi-Vue')
+import { ref } from 'vue'
+const url = ref('https://gitee.com/y_project/RuoYi-Vue')
 
-// function goto() {
-//   window.open(url.value)
-// }
+function goto() {
+  window.open(url.value)
+}
 </script>

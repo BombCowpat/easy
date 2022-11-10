@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -15,6 +14,9 @@ import IconsResolver from 'unplugin-icons/resolver'
 
 // https://github.com/unocss/unocss/tree/main/packages/vite
 import Unocss from 'unocss/vite'
+
+// https://github.com/vbenjs/vite-plugin-svg-icons
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -61,6 +63,26 @@ export default defineConfig({
     }),
     Icons({
       autoInstall: true,
+    }),
+    createSvgIconsPlugin({
+      // Specify the icon folder to be cached
+      // eslint-disable-next-line no-undef
+      // iconDirs: [path.resolve(process.cwd(), 'src/assets/icons/svg')],
+      iconDirs: [fileURLToPath(new URL('src/assets/icons/svg', import.meta.url))],
+      // Specify symbolId format
+      symbolId: 'icon-[dir]-[name]',
+
+      /**
+       * custom insert position
+       * @default: body-last
+       */
+      inject: 'body-last',
+
+      /**
+       * custom dom id
+       * @default: __svg__icons__dom__
+       */
+      customDomId: '__svg__icons__dom__',
     }),
   ],
   resolve: {

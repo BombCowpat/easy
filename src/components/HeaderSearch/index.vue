@@ -1,6 +1,6 @@
 <template>
   <div :class="{ show: show }" class="header-search">
-    <!-- <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" /> -->
+    <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
     <el-select
       ref="headerSearchSelectRef"
       v-model="search"
@@ -39,12 +39,12 @@ const headerSearchSelectRef = ref(null)
 const router = useRouter()
 const routes = computed(() => usePermissionStore().routes)
 
-// function click() {
-//   show.value = !show.value
-//   if (show.value) {
-//     headerSearchSelectRef.value && headerSearchSelectRef.value.focus()
-//   }
-// }
+function click() {
+  show.value = !show.value
+  if (show.value) {
+    headerSearchSelectRef.value && headerSearchSelectRef.value.focus()
+  }
+}
 function close() {
   headerSearchSelectRef.value && headerSearchSelectRef.value.blur()
   options.value = []
