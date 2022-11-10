@@ -45,7 +45,7 @@ router.beforeEach(to => {
              * fix: 404
              * 注释掉会导致刷新页面404
              */
-            // return { ...to }
+            return { ...to }
           })
           .catch(err => {
             // 获取信息失败处理，不同任务的promise链
