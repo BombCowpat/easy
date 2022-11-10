@@ -17,7 +17,7 @@ router.beforeEach(to => {
   NProgress.start()
   if (getToken()) {
     to.meta.title && (useSettingsStore().title = to.meta.title)
-    /* has token*/
+    /* 有token */
     if (to.path === '/login') {
       return '/'
     } else {
@@ -41,14 +41,14 @@ router.beforeEach(to => {
                 router.addRoute(route) // 动态添加可访问路由表
               }
             })
-            return { ...to } // 页面刷新丢失
-          })
-          .catch(() => {
-            return user.logout()
+            return { ...to }
           })
           .catch(err => {
-            ElMessage.error(err)
-            return '/'
+            // 获取信息失败处理，不同任务的promise链
+            return user.logout().then(() => {
+              ElMessage.error(err.toString())
+              return '/'
+            })
           })
       }
     }
