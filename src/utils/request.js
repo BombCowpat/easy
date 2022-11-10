@@ -90,7 +90,7 @@ service.interceptors.response.use(
           .then(() => {
             isRelogin.show = false
             useUserStore()
-              .logOut()
+              .logout()
               .then(() => {
                 location.href = '/index'
               })
