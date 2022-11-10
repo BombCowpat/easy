@@ -13,7 +13,8 @@ require('@rushstack/eslint-patch/modern-module-resolution')
 /** @type { import('eslint').Linter.Config } */
 module.exports = {
   root: true,
-  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/eslint-config-prettier'],
+  // eslint-disable-next-line prettier/prettier
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/eslint-config-prettier', './.eslintrc-auto-import.json'],
   parserOptions: {
     ecmaVersion: 'latest',
   },
@@ -30,5 +31,7 @@ module.exports = {
       },
     ],
     'vue/multi-word-component-names': 'off',
+    'vue/require-valid-default-prop': 'off',
+    'vue/no-mutating-props': 'off',
   },
 }

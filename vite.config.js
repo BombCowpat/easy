@@ -31,6 +31,7 @@ export default defineConfig({
     vue(),
     vueJsx(),
     AutoImport({
+      imports: ['vue', 'vue-router', 'pinia'],
       resolvers: [
         ElementPlusResolver(),
         // Auto import icon components
@@ -39,6 +40,9 @@ export default defineConfig({
           prefix: 'Icon',
         }),
       ],
+      eslintrc: {
+        enabled: true, // <-- this
+      },
     }),
     Components({
       resolvers: [
@@ -63,5 +67,7 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+    // https://cn.vitejs.dev/config/#resolve-extensions
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
   },
 })
