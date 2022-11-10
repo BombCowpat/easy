@@ -94,7 +94,7 @@ function logout() {
     type: 'warning',
   })
     .then(() => {
-      userStore.logOut().then(() => {
+      userStore.logout().then(() => {
         location.href = '/index'
       })
     })
