@@ -25,8 +25,8 @@ router.beforeEach(to => {
       if (user.roles.length === 0) {
         isRelogin.show = true
         /**
-         * 必须返回此promise，不然此语句块默认返回undefined，造成异步路由未加载完成就放行了
-         * No match found for location with path "/system/user"
+         * fix: No match found for location with path "/xxx/xxx"
+         * 必须返回此promise，不然此语句块默认返回undefined，造成异步路由未加载完成就放行了，然后控制台出现多个上诉警告
          */
         return user
           .getInfo()
@@ -41,7 +41,11 @@ router.beforeEach(to => {
                 router.addRoute(route) // 动态添加可访问路由表
               }
             })
-            return { ...to }
+            /**
+             * fix: 404
+             * 注释掉会导致刷新页面404
+             */
+            // return { ...to }
           })
           .catch(err => {
             // 获取信息失败处理，不同任务的promise链

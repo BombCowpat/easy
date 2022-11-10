@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
-
+import { createWebHistory, createRouter } from 'vue-router'
 /* Layout */
-import Layout from '@/layout/index.vue'
+import Layout from '@/layout'
+
 /**
  * Note: 路由配置项
  *
@@ -33,13 +33,13 @@ export const constantRoutes = [
     children: [
       {
         path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect'),
+        component: () => import('@/views/redirect/index.vue'),
       },
     ],
   },
   {
     path: '/login',
-    component: () => import('@/views/login.vue'),
+    component: () => import('@/views/login'),
     hidden: true,
   },
   {
@@ -47,8 +47,12 @@ export const constantRoutes = [
     component: () => import('@/views/register'),
     hidden: true,
   },
+  /**
+   * fix: [Vue Router warn]: No match found for location with path "/xxx/xxx"
+   * vue.use(router) 安装router时会进行一次导航，此路由地址是为了兜底匹配。不然在页面刷新时会出现当前路径匹配不到路由的警告，虽然可以成功导航，但是控制台不干净
+   */
   {
-    path: '/404',
+    path: '/:pathMatch(.*)*',
     component: () => import('@/views/error/404'),
     hidden: true,
   },
@@ -60,11 +64,11 @@ export const constantRoutes = [
   {
     path: '',
     component: Layout,
-    redirect: 'index',
+    redirect: '/index',
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/index.vue'),
+        path: '/index',
+        component: () => import('@/views/index'),
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true },
       },
@@ -78,7 +82,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'profile',
-        component: () => import('@/views/system/user/profile/index'),
+        component: () => import('@/views/system/user/profile/index.vue'),
         name: 'Profile',
         meta: { title: '个人中心', icon: 'user' },
       },
@@ -161,8 +165,15 @@ export const dynamicRoutes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: constantRoutes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
 })
 
 export default router
