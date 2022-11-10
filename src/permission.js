@@ -19,14 +19,16 @@ router.beforeEach(to => {
     to.meta.title && (useSettingsStore().title = to.meta.title)
     /* has token*/
     if (to.path === '/login') {
-      NProgress.done()
       return '/'
     } else {
       const user = useUserStore()
       if (user.roles.length === 0) {
         isRelogin.show = true
-        // 判断当前用户是否已拉取完user_info信息
-        user
+        /**
+         * 必须返回此promise，不然此语句块默认返回undefined，造成异步路由未加载完成就放行了
+         * No match found for location with path "/system/user"
+         */
+        return user
           .getInfo()
           .then(() => {
             isRelogin.show = false
@@ -39,7 +41,7 @@ router.beforeEach(to => {
                 router.addRoute(route) // 动态添加可访问路由表
               }
             })
-            return { ...to, replace: true } // hack方法 确保addRoutes已完成
+            return { ...to } // 页面刷新丢失
           })
           .catch(() => {
             return user.logout()
@@ -48,18 +50,12 @@ router.beforeEach(to => {
             ElMessage.error(err)
             return '/'
           })
-      } else {
-        return true
       }
     }
   } else {
-    // 没有token
-    if (whiteList.indexOf(to.path) !== -1) {
-      // 在免登录白名单，直接进入
-      return true
-    } else {
-      NProgress.done()
-      return `/login?redirect=${to.fullPath}` // 否则全部重定向到登录页
+    // 没有token，并且不在白名单页面
+    if (whiteList.indexOf(to.path) === -1) {
+      return `/login?redirect=${to.fullPath}` // 全部重定向到登录页
     }
   }
 })
